@@ -19,7 +19,7 @@
 # limitations under the License.
 #
 
-template "#{node['ohai']['plugin_path']}/nginx.rb" do
+template "#{node['ohai']['ohai_plugin_path']}/nginx.rb" do
   source "plugins/nginx.rb.erb"
   owner "root"
   group "root"

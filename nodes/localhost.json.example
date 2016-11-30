@@ -1,5 +1,4 @@
 {
-  // This is the list of the recipes that are going to be cooked.
   "run_list": [
     "recipe[apt]",
     "recipe[sudo]",
@@ -12,8 +11,6 @@
     "recipe[postgresql::server]",
     "recipe[nginx]",
     "recipe[nginx::apps]",
-    "recipe[redis::install_from_package]",
-    "recipe[redis::client]",
     "recipe[monit]",
     "recipe[monit::ssh]",
     "recipe[monit::nginx]",
@@ -22,46 +19,34 @@
     "recipe[rvm::user]",
     "recipe[chef-rails]"
   ],
-
   "automatic": {
     "ipaddress": "<host_ip>"
   },
-
-  // You must define who’s going to be the user(s) you’re going to use for deploy.
   "authorization": {
     "sudo": {
-      "groups"      : ["deploy","vagrant"],
-      "users"       : ["deploy","vagrant"],
+      "groups"      : ["<user_name>"],
+      "users"       : ["<user_name>"],
       "passwordless": true
     }
   },
-
-  // You must define the password for postgres user.
-  // Leave config block commented untill next cook.
   "postgresql": {
     "contrib": {
       "extensions": ["pg_stat_statements"]
     },
-    // "config": {
-    //   "shared_buffers": "125MB", // 1/4 of total memory is recommended
-    //   "shared_preload_libraries": "pg_stat_statements"
-    // },
+    "config": {
+     "shared_buffers": "125MB", // 1/4 of total memory is recommended
+     "shared_preload_libraries": "pg_stat_statements"
+      },
     "password"      : {
-      "postgres": "<postgres_user_password>"
+      "postgres": "<psql_passwd>"
     }
   },
-
-  // You must specify the ubuntu distribution by it’s name to configure the proper version
-  // of nginx, otherwise it’s going to fail.
   "nginx": {
-    "user"          : "deploy",
-    "distribution"  : "trusty",
+    "user"          : "<user_name>",
+    "distribution"  : "<linux_distribution>",
     "components"    : ["main"],
     "worker_rlimit_nofile": 30000,
-
-    // Here you should define all the apps you want nginx to serve for you in the server.
     "apps": {
-      // Example for an application served by Unicorn server
       "example.com": {
         "listen"     : [80],
         "server_name": "example.com www.example.com",
@@ -98,8 +83,6 @@
           }
         ]
       },
-
-      // Example for an application served by Thin server
       "example2.com": {
         "listen"     : [80],
         "server_name": "example2.com www.example2.com",
@@ -139,26 +122,18 @@
       }
     }
   },
-
-  // The ruby version you’re going to use and rvm user.
   "rvm" : {
     "user_installs": [
       {
-        "user"         : "deploy",
-        "default_ruby" : "ruby-2.1.2"
+        "user"         : "<user_name>",
+        "default_ruby" : "2.3.1"
       }
     ]
   },
-
-  // Monit configuration. Sets email, check period and delay since monit service start
   "monit" : {
-    "notify_email"     : "email@example.com",
-    "poll_period"      : "60",
-    "poll_start_delay" : "120"
+    "poll_period"      : "30",
+    "poll_start_delay" : "60"
   },
-
-  // Finally, declare all the system packages required by the services and gems you’re using in your apps.
-  // To give you an example: If you’re using paperclip, the native extensions compilation will fail unless you have installed imagemagick declared below.
   "chef-rails": {
     "packages": ["imagemagick", "nodejs-dev"]
   }

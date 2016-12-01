@@ -24,7 +24,7 @@
   },
   "authorization": {
     "sudo": {
-      "groups"      : ["<user_name>"],
+      "groups"      : ["<group_name>"],
       "users"       : ["<user_name>"],
       "passwordless": true
     }

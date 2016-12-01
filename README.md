@@ -1,10 +1,10 @@
 # Chef-Rails
 
-Kitchen to setup an Ubuntu Server ready to roll with Nginx, PostgreSQL, Redis Server and Rails.
+Kitchen to setup an Ubuntu Server ready to roll with Nginx, PostgreSQL and Rails.
 
 ## Requirements
 
-* Ubuntu 12.04+
+* Ubuntu 16.04+
 
 ## Usage
 
@@ -18,13 +18,12 @@ sudo adduser deploy --disabled-password
 # Add your SSH keys to deploy authorized_keys
 sudo mkdir /home/deploy/.ssh/
 sudo vim /home/deploy/.ssh/authorized_keys
-sudo chown deploy:deploy -R /home/deploy/
 ```
 
 ### 1. Prepare your local working copy
 
 ```bash
-git clone git://github.com/acidlabs/chef-rails.git chef
+git clone <url>
 cd chef
 bundle install
 bundle exec librarian-chef install
@@ -67,13 +66,10 @@ For the very same reason, we’re going to exaplain the example for you to ride 
     "recipe[postgresql::server]",
     "recipe[nginx]",
     "recipe[nginx::apps]",
-    "recipe[redis::install_from_package]",
-    "recipe[redis::client]",
     "recipe[monit]",
     "recipe[monit::ssh]",
     "recipe[monit::nginx]",
     "recipe[monit::postgresql]",
-    "recipe[monit::redis-server]",
     "recipe[rvm::user]",
     "recipe[chef-rails]"
   ],
@@ -85,8 +81,8 @@ For the very same reason, we’re going to exaplain the example for you to ride 
   // You must define who’s going to be the user(s) you’re going to use for deploy.
   "authorization": {
     "sudo": {
-      "groups"      : ["deploy","vagrant"],
-      "users"       : ["deploy","vagrant"],
+      "groups"      : ["<group_name>"],
+      "users"       : ["<user_name>"],
       "passwordless": true
     }
   },
@@ -102,15 +98,15 @@ For the very same reason, we’re going to exaplain the example for you to ride 
     //   "shared_preload_libraries": "pg_stat_statements"
     // },
     "password"      : {
-      "postgres": "<postgres_user_password>"
+      "postgres": "<psql_passwd>"
     }
   },
 
   // You must specify the ubuntu distribution by it’s name to configure the proper version
   // of nginx, otherwise it’s going to fail.
   "nginx": {
-    "user"          : "deploy",
-    "distribution"  : "trusty",
+    "user"          : "<user_name>",
+    "distribution"  : "<linux_distribution>",
     "components"    : ["main"],
     "worker_rlimit_nofile": 30000,
 
@@ -199,15 +195,14 @@ For the very same reason, we’re going to exaplain the example for you to ride 
   "rvm" : {
     "user_installs": [
       {
-        "user"         : "deploy",
-        "default_ruby" : "ruby-2.1.2"
+        "user"         : "<user_name>",
+        "default_ruby" : "ruby-2.3.1"
       }
     ]
   },
 
   // Monit configuration. Sets email, check period and delay since monit service start
   "monit" : {
-    "notify_email"     : "email@example.com",
     "poll_period"      : "60",
     "poll_start_delay" : "120"
   },
@@ -244,28 +239,4 @@ CREATE USER deploy SUPERUSER ENCRYPTED PASSWORD '<deploy_user_password>';
 \q
 ```
 
-### 6. Troubleshooting
-
-Here are some issues with current cookbooks recipes, we have to solve them, so it's kind a TODO list:
-
-#### Error executing action \`create\` on resource 'template[/etc/postgresql/9.3/main/postgresql.conf]'
-
-```bash
-ssh [user]@[host] -p [port]
-sudo pg_createcluster 9.3 main --start
-exit
-bundle exec knife solo cook [user]@[host] -p [port]
-```
-
-#### After first succesfull cooking
-
-Uncomment the following block in PostgreSQL configuration:
-
-```json
-    // "config": {
-    //   "shared_buffers": "125MB", // 1/4 of total memory is recommended
-    //   "shared_preload_libraries": "pg_stat_statements"
-    // },
-```
-
-Then, cook again.
+Have a nice cooking.

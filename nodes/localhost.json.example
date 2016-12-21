@@ -11,6 +11,7 @@
     "recipe[postgresql::server]",
     "recipe[nginx]",
     "recipe[nginx::apps]",
+    "recipe[redis::server]",
     "recipe[monit]",
     "recipe[monit::ssh]",
     "recipe[monit::nginx]",

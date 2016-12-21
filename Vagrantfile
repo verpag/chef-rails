@@ -12,6 +12,7 @@ Vagrant::Config.run do |config|
           "recipe[git]",
           "recipe[nginx]",
           "recipe[nginx::apps]",
+          "recipe[redis::server]",
           "recipe[monit]",
           "recipe[monit::ssh]",
           "recipe[rvm::user]",

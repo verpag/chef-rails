@@ -45,11 +45,11 @@ where
 
 ### 3. Define the specs for each server
 
-If you take a look at the *nodes* folder, you’re going to see files called [host].json, corresponding to the hosts or ips of the servers we previously prepared, plus a file called *localhost.json.example* which is, as its name suggests, and example.
+If you take a look at the *nodes* folder, you’re going to see files called [host].json, corresponding to the hosts or IPs of the servers we previously prepared, plus a file called *localhost.json.example* which is, as its name suggests, and example. Just enter your configuration in `< >` fields.
 
 The specs for each server needs to be defined in those files, and the structure is exactly the same as in the example.
 
-For the very same reason, we’re going to exaplain the example for you to ride on your own pony later on.
+For the very same reason, we’re going to explain the example for you to ride on your own pony later on.
 
 ```json
 {
@@ -196,7 +196,7 @@ For the very same reason, we’re going to exaplain the example for you to ride 
     "user_installs": [
       {
         "user"         : "<user_name>",
-        "default_ruby" : "ruby-2.3.1"
+        "default_ruby" : "ruby-2.3.3"
       }
     ]
   },
@@ -239,4 +239,26 @@ CREATE USER deploy SUPERUSER ENCRYPTED PASSWORD '<deploy_user_password>';
 \q
 ```
 
+At last add
+```ruby
+name 'cookbook_name'
+```
+to metadata.rb files in cookbooks folder
+
 Have a nice cooking.
+
+### 6. For Vagrant
+
+Download vagrant from [here](https://www.vagrantup.com/downloads.html) and install
+
+Make sure you have these vagrant plugins:
+- vagrant-berkshelf
+- vagrant-omnibus
+- vagrant-share
+- vagrant-vbguest
+
+run `vagrant up --provision` to provision your VM with chef
+
+and then when finished `vagrant ssh` into your VM
+
+you are ready to try your Vagrant.

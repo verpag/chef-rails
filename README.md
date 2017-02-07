@@ -24,7 +24,7 @@ sudo vim /home/deploy/.ssh/authorized_keys
 
 ```bash
 git clone <url>
-cd chef
+cd chef-rails
 bundle install
 bundle exec librarian-chef install
 ```

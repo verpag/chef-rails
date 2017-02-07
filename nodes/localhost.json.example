@@ -44,7 +44,7 @@
     }
   },
   "nginx": {
-    "users"          : "<user_name>",
+    "user"          : "<user_name>",
     "distribution"  : "<linux_distribution>",
     "components"    : ["main"],
     "worker_rlimit_nofile": 30000,
@@ -127,7 +127,7 @@
   "rvm" : {
     "user_installs": [
       {
-        "users"         : "<user_name>",
+        "user"         : "<user_name>",
         "default_ruby" : "2.3.3"
       }
     ]
